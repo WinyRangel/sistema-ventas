@@ -1,42 +1,45 @@
 import express, { Application } from "express";
 import morgan from "morgan";
-import cors from 'cors'
-import swaggerUI from 'swagger-ui-express'
+import cors from "cors";
+import swaggerUI from "swagger-ui-express";
+import swaggerJsDocs from "./routes/api.docs";
+import indexRoutes from "./routes/index.routes";
 
-class Server{
-    //Crear la instancia global de nuestra app.
+class Server {
+    // Create the global instance of our app.
     public app: Application;
 
-    // ! Generar el constructor
-    constructor(){
+    // * Generate the constructor
+    constructor() {
         this.app = express();
         this.config();
+        this.routes(); // Ensure routes are configured
     }
 
-    //Generar un método para la configuración
-    private config(){
-        //Configuracion del puerto para el servidor 
-        this.app.set("port", process.env.PORT  || 3000);
-        //Mostrar las peticiones en consola
+    // * Generate a method for the configuration
+    private config(): void {
+        // Configure the port for the server
+        this.app.set("port", process.env.PORT || 3000);
+        // Show requests in the console
         this.app.use(morgan('dev'));
-        //Uso de CORS (Cross Origin)
+        // Use CORS (Cross-Origin)
         this.app.use(cors());
-        //Generar restricción
+        // Restriction
         this.app.use(express.json());
-        this.app.use(express.urlencoded({ extended: false}));
-
+        this.app.use(express.urlencoded({ extended: false }));
     }
 
-    // ! Generar un método para la configuración de rutas
-    private routes():void {
-        throw new Error('No implementado');
+    // * Generate a method for the configuration of routes
+    private routes(): void {
+        this.app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(swaggerJsDocs));
+        this.app.use('/api', indexRoutes);
     }
 
-    // * Generar un método para inicializar el servicio
-    start(): void {
-        this.app.listen(this.app.get("port"), ()=> {
+    // * Generate a method to initialize the service
+    public start(): void {
+        this.app.listen(this.app.get("port"), () => {
             console.log("Server on port", this.app.get("port"));
-        })
+        });
     }
 }
 
