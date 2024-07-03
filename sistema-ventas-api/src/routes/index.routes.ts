@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { indexController } from "../controllers/index.controller";
+import { Validate } from "../middlewares/validator.check";
+import { authRules } from "../rules/auth.rules";
 
 class IndexRoutes{
 
@@ -28,7 +30,7 @@ class IndexRoutes{
          *          200:
          *              description:
          */
-        this.router.get('/', indexController.index);
+        this.router.get('/', authRules(), [Validate],indexController.index);
         /**
          * @swagger
          * /api:

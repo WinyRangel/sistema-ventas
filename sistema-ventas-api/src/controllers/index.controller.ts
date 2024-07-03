@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
+import prisma from "../database/database";
 
 class IndexController{
-    public index (req: Request, res: Response){
+    public async index (req: Request, res: Response){
         try {
             // !Testing 
-            // ? throw new Error('Error inesperado');
-            return res.json ({message: "API WORKS!"});
+             return res.json ({message: "API WORKS!"});
         } catch (error: any) {
             return res.status(500).json({meesage: `Error: ${error.meesage}`})
         }
