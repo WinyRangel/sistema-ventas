@@ -33,6 +33,7 @@ class Server {
     private routes(): void {
         this.app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(swaggerJsDocs));
         this.app.use('/api', indexRoutes);
+        this.app.use('/api/auth', indexRoutes);
     }
 
     // * Generate a method to initialize the service
