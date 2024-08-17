@@ -1,0 +1,71 @@
+h3 {
+  margin: 8px 0;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+div[align="right"] {
+  margin-bottom: 16px;
+
+  button {
+    display: flex;
+    align-items: center;
+
+    mat-icon {
+      margin-left: 8px;
+    }
+  }
+}
+
+.table-content {
+  padding: 16px;
+  border-radius: 8px;
+  background-color: #fff;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+      font-weight: 600;
+      text-align: left;
+      padding: 12px;
+      background-color: #f5f5f5;
+    }
+
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #e0e0e0;
+
+      &.text-center {
+        text-align: center;
+      }
+    }
+  }
+}
+
+mat-paginator {
+  margin-top: 16px;
+}
+
+button.mat-flat-button {
+  &.me-2 {
+    margin-right: 8px;
+  }
+
+  mat-icon {
+    margin-left: 4px;
+  }
+
+}
+
+
+
+.mb-2 {
+  margin-bottom: 8px;
+}
+
+.mb-4 {
+  margin-bottom: 16px;
+}

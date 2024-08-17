@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './admin.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import {MatIconModule} from '@angular/material/icon';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
@@ -11,7 +14,10 @@ import { AdminComponent } from './admin.component';
   ],
   imports: [
     CommonModule,
-    AdminRoutingModule
+    AdminRoutingModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    MatPaginatorModule
   ]
 })
 export class AdminModule { }

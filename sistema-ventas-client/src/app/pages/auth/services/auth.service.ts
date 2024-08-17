@@ -46,6 +46,7 @@ export class AuthService {
   login(loginData: any){
     return this.http.post(`${ environment.API_URL }/auth`, loginData)
       .pipe(map((data: any) =>{
+        console.log("response", data)
         if (data.token){
           this.saveLocalStorage(data.token);
           this.token.next(data.token);
@@ -91,6 +92,7 @@ export class AuthService {
     }
   }
   private handleError(error: any){
+    console.log("error", error)
     var message = 'Ocurrio un error';
     if (error.error){
       message = error.message;

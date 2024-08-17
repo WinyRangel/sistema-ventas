@@ -3,6 +3,7 @@ import { BaseForm } from '../../../shared/utils/base-form';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../services/auth.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     password:['',[Validators.required, Validators.minLength(3)]],
   })
   constructor (private fb: FormBuilder,
-     public baseForm: BaseForm, private authService: AuthService){
+     public baseForm: BaseForm, private authService: AuthService
+    ){
 
   }
 
@@ -31,7 +33,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.loginForm.invalid) return;
     //Obtener la informacion del formulario y almacenarla en una variable llamada 'form'
     const form = this.loginForm.value;
-    console.log('Data', form);
     // Ejecutar el servicio 
     this.authService.login(form).pipe(takeUntil(this.destroy$)).subscribe();
   }

@@ -4,19 +4,21 @@ import cors from "cors";
 import swaggerUI from "swagger-ui-express";
 import swaggerJsDocs from "./routes/api.docs";
 import indexRoutes from "./routes/index.routes";
+import authRoutes from "./routes/auth.routes";
+import userRoutes from "./routes/user.routes";
 
 class Server {
     // Create the global instance of our app.
     public app: Application;
 
-    // * Generate the constructor
+    // * contructor
     constructor() {
         this.app = express();
         this.config();
         this.routes(); // Ensure routes are configured
     }
 
-    // * Generate a method for the configuration
+    // * metodo conf
     private config(): void {
         // Configure the port for the server
         this.app.set("port", process.env.PORT || 3000);
@@ -29,14 +31,15 @@ class Server {
         this.app.use(express.urlencoded({ extended: false }));
     }
 
-    // * Generate a method for the configuration of routes
+    // * configuración de rutas
     private routes(): void {
         this.app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(swaggerJsDocs));
         this.app.use('/api', indexRoutes);
-        this.app.use('/api/auth', indexRoutes);
+        this.app.use('/api/auth', authRoutes);
+        this.app.use('/api/users', userRoutes);
     }
 
-    // * Generate a method to initialize the service
+    // * inicializa servicio
     public start(): void {
         this.app.listen(this.app.get("port"), () => {
             console.log("Server on port", this.app.get("port"));

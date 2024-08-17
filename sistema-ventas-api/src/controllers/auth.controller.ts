@@ -5,10 +5,10 @@ import { utils } from '../utils/utils';
 class AuthController {
     public async iniciarSesion(req: Request, response: Response){
         try{
-            var temp = await utils.hashPassword("admin");
-            console.log(temp);
-
-            // Obtener los datos del body
+            //Test            
+            // var temp = await utils.hashPassword("admin");
+            // console.log(temp);
+            // // Obtener los datos del body
             const { username, password } = req.body;
 
             // Verificar si el usuario existe
@@ -46,6 +46,8 @@ class AuthController {
             return response.status(500).json({message: "Error interno"});
         }
     }
+
+
 }
 
 export const authController = new AuthController();

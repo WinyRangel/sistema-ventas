@@ -8,7 +8,11 @@ import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatMenuModule} from '@angular/material/menu';
-
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
 
 
 const myModules:any = [
@@ -20,7 +24,13 @@ const myModules:any = [
     MatCardModule,
     MatInputModule,
     MatSnackBarModule,
-    MatMenuModule
+    MatMenuModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatSelectModule
+    
 ]
 
 @NgModule({

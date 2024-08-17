@@ -1,8 +1,27 @@
-.footer{
+.footer {
     position: fixed;
     width: 100%;
     bottom: 0;
     background-color: rgb(245, 245, 245);
-    padding: 10px 0;
+    padding: 10px 0; /* Aumenta el padding para evitar que sea tan bajo */
     text-align: center;
+    z-index: 10; /* Asegura que el footer esté sobre otros elementos */
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1); /* Agrega una sombra ligera para separar visualmente el footer del contenido */
+}
+
+.container {
+    max-width: 1000px; /* Limita el ancho del contenido dentro del footer */
+    margin: 0 auto; /* Centra el contenido */
+}
+
+.footer p {
+    margin: 0;
+}
+
+.footer hr {
+    margin: 10px 0;
+}
+
+body {
+    padding-bottom: 60px; /* Espacio suficiente para el footer */
 }

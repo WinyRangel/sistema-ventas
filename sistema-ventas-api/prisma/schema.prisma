@@ -23,3 +23,15 @@ model Usuario {
   fechaRegistro DateTime @default(now())
   @@map("tbl_usuario")
 }
+
+model Usuarios {
+  cveuser Int @id @default(autoincrement())
+  nombre String @db.VarChar(250)
+  apellidos String @db.VarChar(600)
+  username String @db.VarChar(150)
+  password String @db.VarChar(800)
+  email String @db.VarChar(250)
+  rol String @db.VarChar(250)
+  fechaRegistro DateTime @default(now())
+  @@map("usuarios")
+}

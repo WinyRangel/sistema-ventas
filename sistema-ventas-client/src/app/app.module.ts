@@ -8,8 +8,12 @@ import { MaterialModule } from './material.module';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
-import { provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { NgxSpinnerModule } from 'ngx-spinner'
+import { loadingInterceptor } from './shared/shared/interceptors/loading.interceptor';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
+// import { LoadingInterceptor } from './shared/shared/interceptors/loading.interceptor';
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,13 +25,16 @@ import { provideHttpClient } from '@angular/common/http';
     BrowserModule,
     AppRoutingModule,
     MaterialModule,
+    NgxSpinnerModule,
+    MatPaginatorModule
 
   ],
   providers: [
     provideClientHydration(),
     provideAnimationsAsync(),
-    provideHttpClient()
-  ],
+    provideHttpClient(
+      withInterceptors([loadingInterceptor])
+    )  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

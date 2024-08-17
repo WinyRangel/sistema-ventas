@@ -2,7 +2,7 @@ import { NextFunction, Request, Response} from 'express'
 import jwt from 'jsonwebtoken'
 import { utils } from '../utils/utils';
 
-export const jwtCheck = (req: Request, res: Response, next: NextFunction) {
+export const jwtCheck = (req: Request, res: Response, next: NextFunction) => {
     try {
         //peticiones deben llevar auth en el header
         const token = <string> req.headers["auth"];
