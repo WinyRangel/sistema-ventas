@@ -1,17 +1,17 @@
-import { Router } from "express";
-import UserController from "../controllers/user.controller";
-import { authRules } from "../rules/auth.rules";
-import { Validate } from "../middlewares/validator.check";
-import { userRules } from "../rules/user.rules";
-
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const user_controller_1 = __importDefault(require("../controllers/user.controller"));
+const validator_check_1 = require("../middlewares/validator.check");
+const user_rules_1 = require("../rules/user.rules");
 class UserRoutes {
-    public router: Router;
-
     constructor() {
-        this.router = Router();
+        this.router = (0, express_1.Router)();
         this.config();
     }
-
     /**
      * @swagger
      * definitions:
@@ -49,38 +49,36 @@ class UserRoutes {
      *            items:
      *              $ref: '#/definitions/User'
      */
-        private getUsers(): void {
-            this.router.get("/", Validate, UserController.obtenerUsuarios);
-        }
-/**
-     * @swagger
-     * /api/users/{cveuser}:
-     *  get:
-     *      tags:
-     *        - Usuarios
-     *      summary: Get a user by ID
-     *      description: Obtener User por ID
-     *      produces:
-     *        - application/json
-     *      parameters:
-     *        - in: path
-     *          name: cveuser
-     *          description: User ID
-     *          required: true
-     *          type: integer
-     *      responses:
-     *        200:
-     *          description: Usuario
-     *          schema:
-     *            $ref: '#/definitions/User'
-     *        404:
-     *          description: User not found
-     */
-    private getUserById(): void {
-    this.router.get('/:cveuser', Validate, UserController.obtenerUsuario);
+    getUsers() {
+        this.router.get("/", validator_check_1.Validate, user_controller_1.default.obtenerUsuarios);
     }
-
-
+    /**
+         * @swagger
+         * /api/users/{cveuser}:
+         *  get:
+         *      tags:
+         *        - Usuarios
+         *      summary: Get a user by ID
+         *      description: Obtener User por ID
+         *      produces:
+         *        - application/json
+         *      parameters:
+         *        - in: path
+         *          name: cveuser
+         *          description: User ID
+         *          required: true
+         *          type: integer
+         *      responses:
+         *        200:
+         *          description: Usuario
+         *          schema:
+         *            $ref: '#/definitions/User'
+         *        404:
+         *          description: User not found
+         */
+    getUserById() {
+        this.router.get('/:cveuser', validator_check_1.Validate, user_controller_1.default.obtenerUsuario);
+    }
     /**
      * @swagger
      * /api/users/register:
@@ -102,10 +100,9 @@ class UserRoutes {
      *        201:
      *          description: User created successfully
      */
-    private registerUser(): void {
-        this.router.post("/register", userRules(), Validate, UserController.registrarusuario);
+    registerUser() {
+        this.router.post("/register", (0, user_rules_1.userRules)(), validator_check_1.Validate, user_controller_1.default.registrarusuario);
     }
-
     /**
      * @swagger
      * /api/users/{cveuser}:
@@ -132,10 +129,9 @@ class UserRoutes {
      *        200:
      *          description: Usuario updated successfully
      */
-    private updateUser(): void {
-        this.router.put("/:cveuser", userRules(), Validate, UserController.actualizarusuario);
+    updateUser() {
+        this.router.put("/:cveuser", (0, user_rules_1.userRules)(), validator_check_1.Validate, user_controller_1.default.actualizarusuario);
     }
-
     /**
      * @swagger
      * /api/users/delete/{cveuser}:
@@ -156,11 +152,10 @@ class UserRoutes {
      *        200:
      *          description: User deleted successfully
      */
-    private deleteUser(): void {
-        this.router.delete("/delete/:cveuser", Validate, UserController.eliminarusuario);
+    deleteUser() {
+        this.router.delete("/delete/:cveuser", validator_check_1.Validate, user_controller_1.default.eliminarusuario);
     }
-
-    private config(): void {
+    config() {
         this.registerUser();
         this.updateUser();
         this.deleteUser();
@@ -168,7 +163,5 @@ class UserRoutes {
         this.getUserById();
     }
 }
-
 const userRoutes = new UserRoutes();
-
-export default userRoutes.router;
+exports.default = userRoutes.router;

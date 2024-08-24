@@ -5,6 +5,7 @@ import { Usuario } from '../../../shared/models/usuario.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { UsuarioDialogComponent } from './components/usuario-dialog/usuario-dialog.component';
 import { UsuariosService } from './services/usuarios.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-usuarios',
@@ -12,6 +13,7 @@ import { UsuariosService } from './services/usuarios.service';
   styleUrls: ['./usuarios.component.scss']
 })
 export class UsuariosComponent implements OnInit, OnDestroy, AfterViewInit {
+  private destroy$ = new Subject;
   dataSource = new MatTableDataSource<Usuario>();
   displayedColumns: string[] = ['nombre', 'apellidos', 'username', 'email', 'rol', 'acciones'];
 
@@ -28,14 +30,19 @@ export class UsuariosComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getUsuarios(): void {
-    this.usuariosService.getUsers().subscribe(
-      (usuarios) => {
-        this.dataSource.data = usuarios;
-      },
-      (error) => {
-        console.error('Error al obtener los usuarios:', error);
-      }
-    );
+
+    this.usuariosService.getUsers().pipe(takeUntil(this.destroy$))
+    .subscribe((usuarios: Usuario[])=>{
+      this.dataSource.data = usuarios;
+    })
+    // this.usuariosService.getUsers().subscribe(
+    //   (usuarios) => {
+    //     this.dataSource.data = usuarios;
+    //   },
+    //   (error) => {
+    //     console.error('Error al obtener los usuarios:', error);
+    //   }
+    // );
   }
 
   onOpenModal(user?: Usuario): void {
@@ -67,5 +74,8 @@ export class UsuariosComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.destroy$.next({});
+    this.destroy$.complete()
+  }
 }

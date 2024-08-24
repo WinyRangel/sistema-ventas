@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url      = env("mysql://admin:Se120494@sistema-ventas-db.czgwwku80ns7.us-east-2.rds.amazonaws.com")
 }
 
 
@@ -35,3 +35,13 @@ model Usuarios {
   fechaRegistro DateTime @default(now())
   @@map("usuarios")
 }
+
+
+model Rol {
+  cveRol      Int     @id @default(autoincrement()) @map("cve_rol")
+  descripcion String  @db.VarChar(250)
+  clave       String  @db.VarChar(600)
+  activo      Boolean @db.TinyInt()
+  @@map("rol")
+}
+

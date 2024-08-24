@@ -27,7 +27,7 @@ export class UsuarioDialogComponent implements OnInit, OnDestroy{
     private fb: FormBuilder,
     private _usuariosService: UsuariosService,
     public baseForm: BaseForm,
-    private dialogRef: MatDialogRef<UsuarioDialogComponent>
+    private dialogRef: MatDialogRef<UsuarioDialogComponent> 
   ) {
     this.userForm = this.fb.group({
       cveuser: [''],
@@ -48,6 +48,12 @@ export class UsuarioDialogComponent implements OnInit, OnDestroy{
   pathData() {
     if (this.data.user?.cveuser) {
       // Editar
+      this.userForm.get('username')?.disable();
+      //Eliminar las validaciones password y confirm password
+      this.userForm.get("password")?.setValidators(null);
+      this.userForm.get("password")?.setErrors(null);
+      this.userForm.get("confirPassword")?.setValidators(null);
+      this.userForm.get("confirPassword")?.setErrors(null);
       this.titleButton = 'Actualizar';
       this.actionTODO = Action.EDIT;
       this.userForm.patchValue(this.data.user); // Llenar formulario con datos del usuario si existe
@@ -69,7 +75,7 @@ export class UsuarioDialogComponent implements OnInit, OnDestroy{
       this._usuariosService.createUsuario(userToSave).subscribe(
         () => {
           this.userForm.reset();
-          this.dialogRef.close(); // Cerrar diálogo después de guardar
+          this.dialogRef.close(this.data); // Cerrar diálogo después de guardar
           console.log("Usuario registrado con éxito");
         },
         error => alert(`Error al crear el usuario: ${error}`)
@@ -79,7 +85,7 @@ export class UsuarioDialogComponent implements OnInit, OnDestroy{
         this._usuariosService.updateUsuario(userToSave).subscribe(
           () => {
             this.userForm.reset();
-            this.dialogRef.close(); // Cerrar diálogo después de actualizar
+            this.dialogRef.close(this.data); // Cerrar diálogo después de actualizar
             console.log("Usuario actualizado con éxito");
           },
           error => alert(`Error al actualizar el usuario: ${error}`)

@@ -12,6 +12,7 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular
 import { NgxSpinnerModule } from 'ngx-spinner'
 import { loadingInterceptor } from './shared/shared/interceptors/loading.interceptor';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import { tokenInterceptor } from './shared/interceptors/token.interceptor';
 
 // import { LoadingInterceptor } from './shared/shared/interceptors/loading.interceptor';
 @NgModule({
@@ -33,7 +34,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     provideClientHydration(),
     provideAnimationsAsync(),
     provideHttpClient(
-      withInterceptors([loadingInterceptor])
+      withInterceptors([loadingInterceptor, tokenInterceptor])
     )  ],
   bootstrap: [AppComponent]
 })
