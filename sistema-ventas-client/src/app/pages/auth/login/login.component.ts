@@ -13,33 +13,32 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class LoginComponent implements OnInit, OnDestroy {
   hide = true;
   private destroy$ = new Subject<any>();
-
   loginForm = this.fb.group({
-    username:['',[Validators.required, Validators.minLength(3)]],
-    password:['',[Validators.required, Validators.minLength(3)]],
-  })
-  constructor (private fb: FormBuilder,
-     public baseForm: BaseForm, private authService: AuthService
-    ){
+    username: ['', [Validators.required, Validators.minLength(3)]],
+    password: ['', [Validators.required, Validators.minLength(3)]]
+  });
+  constructor(private fb: FormBuilder, 
+              public baseForm: BaseForm,
+              private authSvc: AuthService) { }
 
-  }
-
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   onLogin() {
-    // Verificar que el formulario es correcto
+    // Verificar que el formulario sea correcto
     if (this.loginForm.invalid) return;
-    //Obtener la informacion del formulario y almacenarla en una variable llamada 'form'
+
+    // Obtener la información del formulario
+    // y almacenarla en una variable llamada 'form'
     const form = this.loginForm.value;
-    // Ejecutar el servicio 
-    this.authService.login(form).pipe(takeUntil(this.destroy$)).subscribe();
+
+    this.authSvc.login(form)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe();
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next({});
-    this.destroy$.complete();
+      this.destroy$.next({});
+      this.destroy$.complete();
   }
   
 

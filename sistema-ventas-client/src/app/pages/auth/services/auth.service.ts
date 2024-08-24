@@ -18,89 +18,98 @@ export class AuthService {
   private tokenData = new BehaviorSubject<any>({});
   private isLogged = new BehaviorSubject<boolean>(false);
 
-
   constructor(
-    private http: HttpClient,
     private router: Router,
+    private http: HttpClient,
     private snackBar: MatSnackBar,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.checkToken();
-   }
-   get token$(){
+  }
+
+  get token$() {
     return this.token.asObservable();
-   }
+  }
 
-   get tokenValue(){
+  get tokenValue() {
     return this.token.getValue();
-   }
-   
-   get tokenData$(){
+  }
+
+  get tokenData$() {
     return this.tokenData.asObservable();
-   }
+  }
 
-   get isLogged$(){
+  get isLogged$() {
     return this.isLogged.asObservable();
-   }
+  }
 
-  login(loginData: any){
+  login(loginData: any) {
     return this.http.post(`${ environment.API_URL }/auth`, loginData)
-      .pipe(map((data: any) =>{
-        console.log("response", data)
-        if (data.token){
+      .pipe(map( (data: any) => {
+        if (data.token) {
           this.saveLocalStorage(data.token);
           this.token.next(data.token);
           this.isLogged.next(true);
           this.checkToken();
+
           this.router.navigate(['/home']);
         }
+
         return data;
       }),
-    catchError((error)=> this.handleError(error)));
-
+    catchError( (error) => this.handlerError(error)));
   }
-  saveLocalStorage(token: string){
+
+  saveLocalStorage(token: string) {
     localStorage.setItem("jwt", token);
   }
 
-  logOut(){
-    if(isPlatformBrowser(this.platformId)){
+  logout() {
+    if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem("jwt");
     }
     this.token.next("");
     this.tokenData.next(null);
     this.isLogged.next(false);
 
-    this.router.navigate(['/home'])
+    this.router.navigate(['/home']);
   }
 
-  checkToken(){
-    var token: string | null = '';
-    if(isPlatformBrowser(this.platformId)){
+  checkToken() {
+    var token: string | null = "";
+    if (isPlatformBrowser(this.platformId)) {
       token = localStorage.getItem("jwt");
     }
-    if(token){
+
+    if (token) {
       const isExpired = helper.isTokenExpired(token);
-      if(isExpired) this.logOut()
-        else{this.token.next(token)}
-      //Renovamos los datos del usuarip
-      const {iat, exp, ...data} = helper.decodeToken(token);
-      this.tokenData.next(data);
-      this.isLogged.next(true);
-    }else{
-      this.logOut();
+      if (isExpired) 
+        this.logout();
+      else {
+        this.token.next(token);
+
+        // Renovamos los datos del usuario
+        const { iat, exp, ...data } = helper.decodeToken(token);
+        this.tokenData.next(data);
+        this.isLogged.next(true);
+      }
+    } else {
+      this.logout();
     }
   }
-  private handleError(error: any){
-    console.log("error", error)
-    var message = 'Ocurrio un error';
-    if (error.error){
-      message = error.message;
-      if(error.error) message = error.error.message;
-    }else message = 'Ocurrio un error'
-    this.snackBar.open(message, '',{
-      duration:3000
-    })
-    return throwError(()=> new Error(message));
+  
+  private handlerError(error: any) {
+    console.log(error);
+    var message = "Ocurrió un error";
+    if (error.error) {
+      if (error.error.message) message = error.error.message;
+      else message = 'Ocurrió un error';
+    }
+
+    this.snackBar.open(message, '', {
+      duration: 3000
+    });
+
+    return throwError(() => new Error(message));
   }
 }

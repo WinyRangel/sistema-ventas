@@ -25,22 +25,21 @@ class AuthRoutes {
          * @swagger
          * /api/auth:
          *  post:
-         *      tags:
-         *        - Credenciales
+         *      tags: ["Credenciales"]
          *      summary: Log In
-         *      description: Inicio de sesión de usuario
+         *      description: Inicio de sesion del usuario
          *      produces:
-         *        - application/json
+         *          - application/json
          *      parameters:
-         *        - in: body
-         *          name: Credentials
-         *          description: Usuario y contraseña del usuario
-         *          schema:
-         *            $ref: '#/definitions/User'
-         *          required: true
+         *          - in: body
+         *            name: Credentials
+         *            description: Usuario y contraseña del usuario
+         *            schema:
+         *              $ref: '#/definitions/User'
+         *            required: true
          *      responses:
-         *        200:
-         *          description: Éxito
+         *          200:
+         *              description: Exito
          */
         this.router.post("/", (0, auth_rules_1.authRules)(), [validator_check_1.Validate], auth_controller_1.authController.iniciarSesion);
     }

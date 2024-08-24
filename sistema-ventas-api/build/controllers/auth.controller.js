@@ -27,40 +27,46 @@ exports.authController = void 0;
 const database_1 = __importDefault(require("../database/database"));
 const utils_1 = require("../utils/utils");
 class AuthController {
-    iniciarSesion(req, response) {
+    iniciarSesion(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                //Test            
-                // var temp = await utils.hashPassword("admin");
-                // console.log(temp);
-                // // Obtener los datos del body
+                // Test
+                // await this.sleep(2000);
+                var temp = yield utils_1.utils.hashPassword("admin");
+                console.log(temp);
+                // Obtener los datos del body
                 const { username, password } = req.body;
-                // Verificar si el usuario existe
+                // Verificar si el usuario exite
                 const usuario = yield database_1.default.usuario.findFirst({
                     where: {
-                        username
+                        username: username
                     }
                 });
                 if (!usuario) {
-                    return response.status(404).json({ message: "El usuario y/o contraseña es incorrecto" });
+                    return res.status(404).json({ message: "El usuario y/o contraseña es incorrecto" });
                 }
-                // Verificar la contraseña del ususario
+                // Verificar la contraseña del usuario
                 if (yield utils_1.utils.checkPassword(password, usuario.password)) {
                     // Si la contraseña es correcta, generar el payload con la información
                     const { password, fechaRegistro } = usuario, newUser = __rest(usuario, ["password", "fechaRegistro"]);
                     // Generar el JWT
-                    var token = utils_1.utils.generateJWT(newUser);
+                    const token = utils_1.utils.generateJWT(newUser);
                     // Enviar el JWT
-                    response.json({ message: "Autentificación correcta", token });
+                    res.json({ message: "Autentificación correcta", token });
                 }
                 else {
-                    return response.status(404).json({ message: "El usuario y/o contraseña es incorrecto" });
+                    return res.status(404).json({ message: "El usuario y/o contraseña es incorrecto" });
                 }
             }
             catch (error) {
                 console.log(error);
-                return response.status(500).json({ message: "Error interno" });
+                return res.status(500).json({ message: "Error interno" });
             }
+        });
+    }
+    sleep(ms) {
+        return new Promise((resolve) => {
+            setTimeout(resolve, ms);
         });
     }
 }

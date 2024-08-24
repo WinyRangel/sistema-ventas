@@ -1,13 +1,12 @@
-import { Rol } from './rol.interface'
+import { Rol } from "./rol.interface";
 
 export interface Usuario {
-    cveuser?: number;
+    cveUsuario?: number;
     nombre: String;
     apellidos: String;
-    username: String;
-    email: String;
+    username?: String;
     password?: String;
     fechaRegistro?: Date;
-    cveRol?: Number;
+    cveRol?: number;
     rol?: Rol;
 }

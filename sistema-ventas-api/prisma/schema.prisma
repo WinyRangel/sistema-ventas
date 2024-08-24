@@ -10,9 +10,20 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("mysql://admin:Se120494@sistema-ventas-db.czgwwku80ns7.us-east-2.rds.amazonaws.com")
+  url      = env("DATABASE_URL")
 }
 
+
+model Rol {
+  cveRol Int @id @default(autoincrement())
+  descripcion String @db.VarChar(250)
+  clave String @db.VarChar(45)
+  activo Boolean @db.TinyInt()
+
+  Usuario Usuario[]
+
+  @@map("rol")
+}
 
 model Usuario {
   cveUsuario Int @id @default(autoincrement())
@@ -21,27 +32,10 @@ model Usuario {
   username String @db.VarChar(150)
   password String @db.VarChar(800)
   fechaRegistro DateTime @default(now())
-  @@map("tbl_usuario")
+  rol Rol @relation(fields: [cveRol], references: [cveRol])
+  cveRol Int
+
+  @@map("usuario")
 }
 
-model Usuarios {
-  cveuser Int @id @default(autoincrement())
-  nombre String @db.VarChar(250)
-  apellidos String @db.VarChar(600)
-  username String @db.VarChar(150)
-  password String @db.VarChar(800)
-  email String @db.VarChar(250)
-  rol String @db.VarChar(250)
-  fechaRegistro DateTime @default(now())
-  @@map("usuarios")
-}
-
-
-model Rol {
-  cveRol      Int     @id @default(autoincrement()) @map("cve_rol")
-  descripcion String  @db.VarChar(250)
-  clave       String  @db.VarChar(600)
-  activo      Boolean @db.TinyInt()
-  @@map("rol")
-}
 

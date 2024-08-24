@@ -4,68 +4,53 @@ import { catchError, Observable, throwError } from 'rxjs';
 import { Usuario } from '../../../../shared/models/usuario.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { error } from 'console';
+import { environment } from '../../../../../environments/environment.development';
+import { Rol } from '../../../../shared/models/rol.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuariosService {
-  url = 'http://localhost:3000/api/users';
+  constructor(private snackBar: MatSnackBar,
+              private http: HttpClient) { }
 
-  constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
+      listarUsuarios() : Observable<Usuario[]> {
+      return this.http.get<Usuario[]>(`${environment.API_URL}/usuarios`, { headers: {"requireToken" : "true"}})
+      .pipe(catchError( (error) => this.handlerError(error)));
+      }
 
-  getUserById(cveUsuario: number): Observable<Usuario> {
-    return this.http.get<Usuario>(`${this.url}/${cveUsuario}`);
-  }
+      listarRoles() : Observable<Rol[]> {
+      return this.http.get<Rol[]>(`${environment.API_URL}/general/roles`, { headers: {"requireToken" : "true"}})
+      .pipe(catchError( (error) => this.handlerError(error)));
+      }
 
-  getUsers(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(this.url, {headers: {"requiereToken": "true"}})
-    .pipe(catchError( (error)=> this.handleError(error)))
-  }
+      insertarUsuario(user: Usuario): Observable<Usuario> {
+      return this.http.post<Usuario>(`${environment.API_URL}/usuarios`, user, { headers: {"requireToken" : "true"}})
+      .pipe(catchError( (error) => this.handlerError(error)));
+      }
 
-  createUsuario(usuario: Usuario): Observable<Usuario> {
-    return this.http.post<Usuario>(`${this.url}/register`, usuario, {headers: {"requiereToken": "true"}})
-    .pipe(catchError( (error)=> this.handleError(error)))
-  }
+      actualizarUsuario(user: Usuario): Observable<Usuario> {
+      return this.http.put<Usuario>(`${environment.API_URL}/usuarios`, user, { headers: {"requireToken" : "true"}})
+      .pipe(catchError( (error) => this.handlerError(error)));
+      }
 
-  updateUsuario(usuario: Usuario): Observable<Usuario> {
-    return this.http.put<Usuario>(`${this.url}/${usuario.cveuser}`, usuario, {headers: {"requiereToken": "true"}})
-    .pipe(catchError( (error)=> this.handleError(error)))
+      eliminarUsuario(cveUsuario: number) {
+      return this.http.delete<Usuario>(`${environment.API_URL}/usuarios/${cveUsuario}`, { headers: {"requireToken" : "true"}})
+      .pipe(catchError( (error) => this.handlerError(error)));
+      }
 
-  }  
+      private handlerError(error: any) {
+      console.log(error);
+      var message = "Ocurrió un error";
+      if (error.error) {
+      if (error.error.message) message = error.error.message;
+      else message = 'Ocurrió un error';
+      }
 
-  deleteUsuario(cveuser: number): Observable<void> {
-    return this.http.delete<void>(`${this.url}/delete/${cveuser}`);
-  }
+      this.snackBar.open(message, '', {
+      duration: 3000
+      });
 
-  private handleError(error: any){
-    console.log("error", error)
-    var message = 'Ocurrio un error';
-    if (error.error){
-      message = error.message;
-      if(error.error) message = error.error.message;
-    }else message = 'Ocurrio un error'
-    this.snackBar.open(message, '',{
-      duration:3000
-    })
-    return throwError(()=> new Error(message));
-  }
+      return throwError(() => new Error(message));
+      }
 }
-
-
-/**
- * constructor(private snackBar: MatSnackBar, private http: HttpClient){}
- * 
- * listarUsuario(){}
- *   private handleError(error: any){
-    console.log("error", error)
-    var message = 'Ocurrio un error';
-    if (error.error){
-      message = error.message;
-      if(error.error) message = error.error.message;
-    }else message = 'Ocurrio un error'
-    this.snackBar.open(message, '',{
-      duration:3000
-    })
-    return throwError(()=> new Error(message));
-  }
- */

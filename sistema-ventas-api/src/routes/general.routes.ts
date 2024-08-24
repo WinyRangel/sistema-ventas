@@ -1,20 +1,19 @@
 import { Router } from "express";
-import { Validate } from "../middlewares/validator.check";
-import rolesController from "../controllers/general.controller";
+import { jwtCheck } from "../middlewares/jwt.check";
+import { generalController } from "../controllers/general.controller";
 
-class GeneralRoutes{
+class GeneralRoutes {
     public router: Router;
+
     constructor() {
         this.router = Router();
         this.config();
     }
-    private getRoles(): void {
-        this.router.get("/roles", Validate, rolesController.obtenerRoles);
-    }
-    private config(): void{
-        this.getRoles
+
+    private config() {
+        this.router.get('/roles', generalController.listarRoles);
     }
 }
-const generalRoutes = new GeneralRoutes();
 
+const generalRoutes = new GeneralRoutes();
 export default generalRoutes.router;

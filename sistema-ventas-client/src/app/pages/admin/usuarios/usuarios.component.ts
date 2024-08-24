@@ -13,69 +13,61 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrls: ['./usuarios.component.scss']
 })
 export class UsuariosComponent implements OnInit, OnDestroy, AfterViewInit {
-  private destroy$ = new Subject;
-  dataSource = new MatTableDataSource<Usuario>();
-  displayedColumns: string[] = ['nombre', 'apellidos', 'username', 'email', 'rol', 'acciones'];
+  constructor(private dialog: MatDialog, 
+    private usuarioSvc: UsuariosService) {}
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+private destroy$ = new Subject();
+dataSource = new MatTableDataSource();
+@ViewChild(MatPaginator) paginator!: MatPaginator;
+displayedColumns: String[] = ['nombre', 'apellidos', 'username', 'rol', 'acciones'];
 
-  constructor(private dialog: MatDialog, private usuariosService: UsuariosService) {}
+// ng g s pages/admin/usuarios/services/usuarios
 
-  ngOnInit(): void {
-    this.getUsuarios();
-  }
+ngOnInit(): void {
+this.listar();
+}
 
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-  }
+listar() {
+this.usuarioSvc.listarUsuarios()
+.pipe(takeUntil(this.destroy$))
+.subscribe( (usuarios: Usuario[]) => {
+this.dataSource.data = usuarios;
+});
+}
 
-  getUsuarios(): void {
+ngAfterViewInit(): void {
+this.dataSource.paginator = this.paginator;
+}
 
-    this.usuariosService.getUsers().pipe(takeUntil(this.destroy$))
-    .subscribe((usuarios: Usuario[])=>{
-      this.dataSource.data = usuarios;
-    })
-    // this.usuariosService.getUsers().subscribe(
-    //   (usuarios) => {
-    //     this.dataSource.data = usuarios;
-    //   },
-    //   (error) => {
-    //     console.error('Error al obtener los usuarios:', error);
-    //   }
-    // );
-  }
+onOpenModal(user = {}) {
+const dialogRef = this.dialog.open(UsuarioDialogComponent, {
+maxWidth: '100%',
+width: '80%',
+data: {
+user
+}
+});
 
-  onOpenModal(user?: Usuario): void {
-    const dialogRef = this.dialog.open(UsuarioDialogComponent, {
-      minWidth: '60%',
-      maxWidth: '100%',
-      data: { user }
-    });
+dialogRef.afterClosed()
+.pipe(takeUntil(this.destroy$))
+.subscribe( result => {
+if (result) {
+this.listar();
+}
+});
+}
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.getUsuarios(); // Actualizar la lista de usuarios después de cerrar el diálogo
-      }
-    });
-  }  
+onDelete(cveUsuario: number) {
+this.usuarioSvc.eliminarUsuario(cveUsuario)
+.pipe(takeUntil(this.destroy$))
+.subscribe( (result: Usuario) => {
+this.listar();
+});
+}
 
+ngOnDestroy(): void {
+this.destroy$.next({});
+this.destroy$.complete();
+}
 
-  onDeleteUsuario(id: number): void {
-    if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
-      this.usuariosService.deleteUsuario(id).subscribe(
-        () => {
-          this.getUsuarios(); // Actualizar la lista de usuarios después de eliminar
-          console.log('Usuario eliminado con éxito');
-        },
-        (error) => {
-          console.error('Error al eliminar el usuario:', error);
-        }
-      );
-    }
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next({});
-    this.destroy$.complete()
-  }
 }

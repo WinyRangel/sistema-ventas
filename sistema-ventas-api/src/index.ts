@@ -5,8 +5,8 @@ import swaggerUI from "swagger-ui-express";
 import swaggerJsDocs from "./routes/api.docs";
 import indexRoutes from "./routes/index.routes";
 import authRoutes from "./routes/auth.routes";
-import userRoutes from "./routes/user.routes";
 import generalRoutes from "./routes/general.routes";
+import usuarioRoutes from "./routes/usuario.routes";
 
 class Server {
     // Create the global instance of our app.
@@ -37,8 +37,10 @@ class Server {
         this.app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(swaggerJsDocs));
         this.app.use('/api', indexRoutes);
         this.app.use('/api/auth', authRoutes);
-        this.app.use('/api/users', userRoutes);
+        this.app.use("/api/usuarios", usuarioRoutes);
         this.app.use('/api/roles', generalRoutes);
+        this.app.use("/api/general", generalRoutes);
+
     }
 
     // * inicializa servicio

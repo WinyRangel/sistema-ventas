@@ -10,8 +10,8 @@ const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const api_docs_1 = __importDefault(require("./routes/api.docs"));
 const index_routes_1 = __importDefault(require("./routes/index.routes"));
 const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
-const user_routes_1 = __importDefault(require("./routes/user.routes"));
 const general_routes_1 = __importDefault(require("./routes/general.routes"));
+const usuario_routes_1 = __importDefault(require("./routes/usuario.routes"));
 class Server {
     // * contructor
     constructor() {
@@ -36,8 +36,9 @@ class Server {
         this.app.use("/api/docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(api_docs_1.default));
         this.app.use('/api', index_routes_1.default);
         this.app.use('/api/auth', auth_routes_1.default);
-        this.app.use('/api/users', user_routes_1.default);
+        this.app.use("/api/usuarios", usuario_routes_1.default);
         this.app.use('/api/roles', general_routes_1.default);
+        this.app.use("/api/general", general_routes_1.default);
     }
     // * inicializa servicio
     start() {

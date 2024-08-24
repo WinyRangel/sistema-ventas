@@ -12,23 +12,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.generalController = void 0;
 const database_1 = __importDefault(require("../database/database"));
-const utils_1 = require("../utils/utils");
 class GeneralController {
-    obtenerRoles(req, res) {
+    listarRoles(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const token = req.headers['auth'];
-                const currentUser = utils_1.utils.getPayload(token);
-                // Consultar todos los usuarios
-                const rol = yield database_1.default.rol.findMany();
-                return res.status(200).json(rol);
+                const roles = yield database_1.default.rol.findMany({
+                    where: {
+                        activo: true
+                    },
+                    orderBy: {
+                        descripcion: 'asc'
+                    }
+                });
+                return res.json(roles);
             }
             catch (error) {
-                console.error(error);
-                return res.status(500).json({ message: 'Error interno del servidor' });
+                return res.status(500).json({ message: `${error.message}` });
             }
         });
     }
 }
-exports.default = new GeneralController();
+exports.generalController = new GeneralController();
