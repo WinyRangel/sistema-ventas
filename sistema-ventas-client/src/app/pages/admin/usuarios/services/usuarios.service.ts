@@ -4,7 +4,7 @@ import { catchError, Observable, throwError } from 'rxjs';
 import { Usuario } from '../../../../shared/models/usuario.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { error } from 'console';
-import { environment } from '../../../../../environments/environment.development';
+import { environment } from '../../../../../environments/environment';
 import { Rol } from '../../../../shared/models/rol.interface';
 
 @Injectable({
